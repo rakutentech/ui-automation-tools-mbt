@@ -6,6 +6,18 @@ def readme():
         return f.read()
 
 
+packages = [
+    'uiautomationtools',
+    'uiautomationtools.helpers',
+    'uiautomationtools.logging',
+    'uiautomationtools.models',
+    'uiautomationtools.proxy',
+    'uiautomationtools.pytest',
+    'uiautomationtools.selenium',
+    'uiautomationtools.validations'
+]
+
+
 requires = [
     'pytest',
     'pytest-xdist',
@@ -38,7 +50,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=['uiautomationtools'],
+    packages=packages,
     python_requires=">=3.8",
     install_requires=requires
 )
