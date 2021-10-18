@@ -1,0 +1,8 @@
+docstrings
+.idea
+__pycache__
+*.egg-info
+
+.DS_Store
+*mb*.css
+*.pyc
