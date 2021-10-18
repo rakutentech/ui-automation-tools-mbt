@@ -32,7 +32,7 @@ setuptools.setup(
     description="Tools for UI automation using model based testing",
     long_description=readme(),
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/rakutentech/ui-automation-tools-mbt",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
