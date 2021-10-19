@@ -60,7 +60,7 @@ class PytestHelper(object):
         for store in self.store.values():
             store['app'].driver.quit()
 
-    def test_run_steps(self, target):
+    def test_run_steps(self, test_app, target):
         """
         This iterates through and runs the model steps.
 

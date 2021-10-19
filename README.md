@@ -41,10 +41,12 @@ There are class properties that can be set from your SomeBasePytest class. You c
 methods that will run before executing the test model steps. The **target** is either a browser or mobile
 device configurable through a pytest.ini. 
 ```
+import pytest
 from uiautomationtools.pytest import PytestHelper
 
 class SomeBasePytest(PytestHelper):
 
+    @pytest.fixture
     def test_app(self, target):
         self.app = PytestHelper.app = App(...)
 ```
