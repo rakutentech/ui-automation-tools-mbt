@@ -1,21 +1,9 @@
-import setuptools
+from setuptools import setup, find_packages
 
 
 def readme():
     with open("README.md", "r", encoding="utf-8") as f:
         return f.read()
-
-
-packages = [
-    'uiautomationtools',
-    'uiautomationtools.helpers',
-    'uiautomationtools.logging',
-    'uiautomationtools.models',
-    'uiautomationtools.proxy',
-    'uiautomationtools.pytest',
-    'uiautomationtools.selenium',
-    'uiautomationtools.validations'
-]
 
 
 requires = [
@@ -36,7 +24,7 @@ requires = [
 ]
 
 
-setuptools.setup(
+setup(
     name="ui-automation-tools-mbt",
     version="1.0.0",
     author="Ashton Szabo",
@@ -50,7 +38,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=packages,
+    packages=find_packages(),
     python_requires=">=3.8",
     install_requires=requires
 )
