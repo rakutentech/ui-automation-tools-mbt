@@ -42,10 +42,10 @@ class SeleniumAppiumShared(object):
             native (bool): Whether to force a native selenium vs js injected click.
         """
         self.time.sleep(.5)
-        if not native and self.platform_name == 'safari':
-            self.execute_script('arguments[0].click();', self._active_element)
-        else:
+        if native:
             self._active_element._execute('clickElement')
+        else:
+            self.execute_script('arguments[0].click();', self._active_element)
 
     def find_element_explicitly(self, value, by='xpath', timeout=15, safe=False, many=False):
         """
