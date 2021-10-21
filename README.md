@@ -18,9 +18,9 @@ framework. The tests are documented as drawio flow diagrams of action and valida
 13. `npm install -g appium` **(appium)**
 14. `npm install -g appium-doctor` **(appium)**
 15. [graphwalker-cli](https://altom.gitlab.io/altwalker/altwalker/installation.html) **(selenium, appium)**
-16. [chrome](https://chromedriver.chromium.org) and/or [geckodriver](https://github.com/mozilla/geckodriver/releases) **(selenium, _appium_)**
+16. [chromedriver](https://chromedriver.chromium.org) and/or [geckodriver](https://github.com/mozilla/geckodriver/releases) **(selenium, _appium_)**
 
-## Setup
+## Local Setup
 1. Clone this repo
 2. In the terminal cd into the root of your main test project
 3. In the terminal run `pipenv install -e path_to_uiautomationtools`
@@ -65,7 +65,8 @@ platform specified in the desired capabilities, an android or ios driver will be
 from uiautomationtools.selenium import appium_factory
 
 driver = appium_factory('http://localhost:4723/wd/hub', desired_capabilities)
-element = driver.find_element_explicitly('//android.widget.TextView[@content-desc="something"]', 'xpath')
+selector = '//android.widget.TextView[@content-desc="something"]'
+element = driver.find_element_explicitly(selector, 'xpath')
 ```
 
 ### Validations
@@ -87,7 +88,8 @@ This package requires the following base structure for the project.
 ├── credentials                         # Optional - credentials
 │   └── credentials.json                # Optional - credentials as json
 ├── drivers                             # Required - webdrivers
-│   └── {platform}_chromedriver         # Required - darwin_chromedriver, darwin_geckodriver (firefox), etc
+│   ├── {platform}_chromedriver         # Required - darwin, linux, etc
+│   └── {platform}_geckodriver          # Required - darwin, linux, etc
 ├── src                                 # Required - source code
 │   └── app                             # Required - app under test (page objects/API's)
 │       ├── ...                         # Required - app framework code
@@ -102,8 +104,12 @@ This package requires the following base structure for the project.
 │       │       └── test_file.drawio    # Required - test model as .drawio
 │       └── ui_automation               # Required - test code
 │           └── feature                 # Optional - feature of test code
-│               └── test_file.py        # Required - pytest test (same name as the corresponding model file)
+│               └── test_file.py        # Required - pytest test 
+│                                                    (same name as the 
+│                                                     corresponding model file)
 └── validations                         # Optional - validation data
     └── feature                         # Optional - feature of validations
-        └── test_file.json              # Optional - validation data as json (same name as the corresponding model file)
+        └── test_file.json              # Optional - validation data as json 
+                                                     (same name as the 
+                                                      corresponding model file)
 ```
