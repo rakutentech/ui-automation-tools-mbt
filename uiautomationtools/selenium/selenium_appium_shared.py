@@ -36,13 +36,14 @@ class SeleniumAppiumShared(object):
 
     def click_override(self, native=False):
         """
-        This will override the .click method and handles safari vs. else click diversion.
+        This will override the .click method for web apps and views.
 
         Args:
-            native (bool): Whether to force a native selenium vs js injected click.
+            native (bool): Whether to force the native click action.
         """
         self.time.sleep(.5)
-        if native:
+        context = getattr(self, 'current_context', 'None').lower()
+        if native or 'native' in context:
             self._active_element._execute('clickElement')
         else:
             self.execute_script('arguments[0].click();', self._active_element)
