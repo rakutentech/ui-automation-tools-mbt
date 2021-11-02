@@ -153,7 +153,7 @@ class AppiumShared(webdriver.Remote, SeleniumAppiumShared):
         while self.time.time() <= timeout_ms:
             self.time.sleep(.25)
             page_source = self.page_source
-            if not [thing for thing in bad_things if thing in page_source] and 'TextView' in page_source:
+            if page_source and not [thing for thing in bad_things if thing in page_source]:
                 self.logger.info('Got the native page source.\n')
                 return page_source
 
