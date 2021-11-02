@@ -1,5 +1,6 @@
 import os
 import json
+from glob import iglob
 
 
 def safe_mkdirs(path):
@@ -10,7 +11,7 @@ def safe_mkdirs(path):
         path (str): The full path of the would be directory.
     """
     if not os.path.exists(path):
-        os.makedirs(path)
+        os.makedirs(path, exist_ok=True)
 
 
 def make_json(content, path, append=False, ensure_ascii=False):
@@ -26,6 +27,8 @@ def make_json(content, path, append=False, ensure_ascii=False):
     if append and os.path.exists(path):
         stored_json = load_json(path)
         content = {**stored_json, **content}
+
+    safe_mkdirs('/'.join(path.split('/')[:-1]))
     with open(path, 'w') as fp:
         json.dump(content, fp, indent=4, ensure_ascii=ensure_ascii)
 
@@ -84,3 +87,19 @@ def get_src_app_dir():
         app (str): The src app/project folder in use.
     """
     return os.environ.get('PYTEST_CURRENT_TEST').split('::')[0].split('/')[1]
+
+
+def expand_directory(path):
+    """
+    This expands a directory into a list of its files absolute paths.
+
+    Args:
+        path (str): The path of the directory to traverse.
+
+    Returns:
+        files (list): The list of files in a directory.
+    """
+    files = [path]
+    if os.path.isdir(path):
+        files = [f for f in iglob(f'{path}//**', recursive=True) if 'ds_store' not in f.lower()]
+    return files
