@@ -32,5 +32,5 @@ def delimiter_to_camelcase(string, delimiter='_', first_lower=False):
         split_string = string.split(delimiter)
     converted_string = ''.join(x.capitalize() or delimiter for x in split_string)
     if first_lower:
-        converted_string = converted_string[0].upper() + converted_string[1:]
+        converted_string = converted_string[0].lower() + converted_string[1:]
     return converted_string
