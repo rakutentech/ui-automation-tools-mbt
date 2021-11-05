@@ -65,6 +65,8 @@ class Validations(object):
         Returns:
             references (dict): The references of the page.
         """
+        skipped_tags = skipped_tags or []
+
         references = {}
         for d in BeautifulSoup(html, 'html.parser').descendants:
             if 'Tag' not in str(type(d)):
@@ -83,12 +85,12 @@ class Validations(object):
             if d.name:
                 attrs['tag'] = d.name
 
-            global_tags = f"{attrs.get('tag')},{attrs.get('class')}"
-            if skipped_tags and any(t in global_tags for t in skipped_tags):
-                continue
-
             context = attrs.get('id') or attrs.get('name') or attrs.get('placeholder') or attrs.get('text') or 'no_key'
             context = re.sub(r'(\W|_)+', '_', context.lower())
+
+            global_tags = f"{attrs.get('tag')},{attrs.get('class')},{context}"
+            if skipped_tags and any(t in global_tags for t in skipped_tags):
+                continue
 
             if not references.get(context):
                 references[context] = [attrs]
@@ -109,8 +111,6 @@ class Validations(object):
         Returns:
             references (dict): The dictionary of the references.
         """
-        skipped_tags = skipped_tags or []
-
         self.logger.info(f'\n')
         self.logger.info(f'Building appium references for {file_path}.')
         html = self.driver.get_page_source()
