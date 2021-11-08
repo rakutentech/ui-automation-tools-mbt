@@ -3,8 +3,8 @@ import subprocess
 from mitmproxy import io
 from datetime import datetime
 
+import uiautomationtools.helpers.json_helpers as jh
 import uiautomationtools.helpers.directory_helpers as dh
-import uiautomationtools.helpers.dictionary_helpers as dich
 
 
 class Proxy(object):
@@ -63,12 +63,12 @@ class Proxy(object):
                 for k, v in request.items():
                     v_type = type(v)
                     if v_type is str or v_type is bytes:
-                        request[k] = dich.deserialize(v, UnicodeDecodeError)
+                        request[k] = jh.deserialize(v, UnicodeDecodeError)
             if response:
                 for k, v in response.items():
                     v_type = type(v)
                     if v_type is str or v_type is bytes:
-                        response[k] = dich.deserialize(v, UnicodeDecodeError)
+                        response[k] = jh.deserialize(v, UnicodeDecodeError)
 
             return {'request': request, 'response': response}
 
