@@ -20,6 +20,10 @@ framework. The tests are documented as drawio flow diagrams of action and valida
 15. [graphwalker-cli](https://altom.gitlab.io/altwalker/altwalker/installation.html) **(selenium, appium)**
 16. [chromedriver](https://chromedriver.chromium.org) and/or [geckodriver](https://github.com/mozilla/geckodriver/releases) **(selenium, _appium_)**
 
+## Pip Installation
+1. In the terminal cd into the root of your main test project
+2. In the terminal run [`pipenv install ui-automation-tools-mbt`](https://pypi.org/project/ui-automation-tools-mbt/)
+
 ## Local Setup
 1. Clone this repo
 2. In the terminal cd into the root of your main test project
