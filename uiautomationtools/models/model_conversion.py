@@ -13,7 +13,8 @@ from urllib.parse import unquote
 import xml.etree.ElementTree as ET
 
 import uiautomationtools.helpers.directory_helpers as dh
-from uiautomationtools.helpers.dictionary_helpers import flatten, deserialize
+from uiautomationtools.helpers.dictionary_helpers import flatten
+from uiautomationtools.helpers.json_helpers import deserialize
 
 
 def find_drawio_xml_nodes(model_name):
