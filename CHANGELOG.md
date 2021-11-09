@@ -1,6 +1,6 @@
 ## CHANGELOG
 
-### [1.1.0 (2021-11-?)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.1.0)
+### [1.1.0 (2021-11-10)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.1.0)
 
 [Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.0.1...v1.1.0)
 
