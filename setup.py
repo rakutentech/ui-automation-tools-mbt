@@ -11,7 +11,7 @@ requires = [
     'pytest-xdist',
     'pytest-parallel',
     'altwalker',
-    'selenium',
+    'selenium<4.0.0',
     'Appium-Python-Client',
     'numpy',
     'langdetect',
