@@ -1,9 +1,19 @@
 ## CHANGELOG
 
+### [1.1.1 (2021-11-11)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.1.1)
+
+[Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.1.0...v1.1.1)
+
+- **build(core):** increase version to 1.1.1
+- **build(core):** allow selenium < 4.0.0
+
+---
 ### [1.1.0 (2021-11-11)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.1.0)
 
 [Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.0.1...v1.1.0)
 
+- **docs(core):** added command and link to pip package.
+- **fix(core):** updated json_helpers usage paths
 - **fix(core):** added element context to skip list and a little cleanup
 - **fix(core):** checked on page source existence
 - **fix(core):** lowering the first character on first_lower True
