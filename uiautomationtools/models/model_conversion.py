@@ -32,7 +32,7 @@ def find_drawio_xml_nodes(model_name):
         if not value:
             return n
 
-        step_name = re.findall(r'[evi]+(?:_[a-z0-9]+)*', value) or [value]
+        step_name = re.findall(r'[evi]+(?:_[a-z0-9]+)+', value) or [value]
         step_name = step_name[0]
 
         actions = value.replace(step_name, '')

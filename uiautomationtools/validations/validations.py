@@ -209,7 +209,7 @@ class Validations(object):
 
     def fail(self, error_message, exception=Exception):
         """
-        This fails a test. To enable debug mode set the property self.debut to True.
+        This fails a test. To enable debug mode set the property self.debug to True.
 
         Args:
             error_message (str): The failure message to log.
