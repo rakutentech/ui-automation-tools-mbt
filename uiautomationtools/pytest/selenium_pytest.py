@@ -45,7 +45,25 @@ class PytestHelper(object):
 
         model_name = self.calling_test.split('/')[-1].split('.')[0]
         self.model_steps = self.model_steps or mc.prepare_steps(model_name, self.new_steps, self.decision_map)
+        self.original_model_steps = self.model_steps[:] # deepcopy if doesnt work
 
+        if self.skip_validations:
+            self.model_steps = [s for s in self.model_steps if not s['name'].startswith('v_')]
+
+        if self.skipped_steps:
+            ancestors = set()
+            names = set()
+
+            [ancestors.update(s.get('ancestors')) if any(step.startswith('i_') for step in s.get('ancestors', []))
+             else names.update(s.get('name')) for s in self.model_steps]
+            filtered_models = []
+            for s in self.model_steps:
+                if any(a in self.skipped_steps for a in s.get('ancestors', [])):
+                    continue
+                if any(a in self.skipped_steps for a in s.get('name', [])):
+                    continue
+                filtered_models.append(s)
+            self.model_steps = filtered_models
         if not self.model_steps:
             raise Exception("No model steps were generated - check the model drawio and json files. "
                             "If the issue seems unexplainable, don't try to fix it - in new drawio files, "
@@ -95,11 +113,6 @@ class PytestHelper(object):
             if not step.get('ancestors'):
                 test_module = 'self'
             step_name = step['name']
-
-            if self.skip_validations and step_name.split('_')[0] == 'v':
-                continue
-            if any(i in step_name for i in self.skipped_steps):
-                continue
 
             try:
                 if test_module == 'self' or test_module == self.test_path.split('/')[-1]:
