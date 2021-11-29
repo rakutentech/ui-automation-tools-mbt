@@ -51,18 +51,13 @@ class PytestHelper(object):
             self.model_steps = [s for s in self.model_steps if not s['name'].startswith('v_')]
 
         if self.skipped_steps:
-            ancestors = set()
-            names = set()
-
-            [ancestors.update(s.get('ancestors')) if any(step.startswith('i_') for step in s.get('ancestors', []))
-             else names.update(s.get('name')) for s in self.model_steps]
             filtered_models = []
-            for s in self.model_steps:
-                if any(a in self.skipped_steps for a in s.get('ancestors', [])):
+            for step in self.model_steps:
+                if any(ancestor in self.skipped_steps for ancestor in step.get('ancestors', [])):
                     continue
-                if any(a in self.skipped_steps for a in s.get('name', [])):
+                if any(name in self.skipped_steps for name in step.get('name', [])):
                     continue
-                filtered_models.append(s)
+                filtered_models.append(step)
             self.model_steps = filtered_models
         if not self.model_steps:
             raise Exception("No model steps were generated - check the model drawio and json files. "
