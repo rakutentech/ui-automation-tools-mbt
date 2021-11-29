@@ -28,6 +28,14 @@ Please fill the following information in each issue you submit:
 
 Please include additional tests where necessary to cover any functionality that is introduced.
 
+### The Pull Request scheme:
+
+ * Description: A light story telling of the changes made and why.
+ * Ticket: If existing, the ticket for tracking this work.
+ * Test Steps: Any special steps or info needed to test the PR. If all there is to do is run the test, just say so.
+ * Run Logs: Proof the changes work and haven't broken anything.
+ * Note: We should try to keep the code to under 100 lines per PR.
+
 ## Coding Guidelines
 
 * All features or bug fixes **must be tested**
