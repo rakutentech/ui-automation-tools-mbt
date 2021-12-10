@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+### [1.2.0 (2021-12-10)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.2.0)
+
+[Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.1.1...v1.2.0)
+
+- **build(core): updated changelog and version.
+- **Add the PR description scheme.
+- **Feat: Skip steps. Clean the code by removing unused variables and renaming iterators
+- **Feat: Skip steps
+- **fix(core): fix the regex and typo.
+
+---
 ### [1.1.1 (2021-11-11)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.1.1)
 
 [Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.1.0...v1.1.1)
