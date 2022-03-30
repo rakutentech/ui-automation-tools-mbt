@@ -68,23 +68,33 @@ class AppiumShared(webdriver.Remote, SeleniumAppiumShared):
         self.logger.info(f"Attached to session {session_id} at {command_executor}.\n")
         return self
 
-    def switch_context(self, view=None):
+    def switch_context(self, view=None, timeout=15):
         """
         This switches context ie from native app to webview.
 
         Args:
             view (None|str): The view you want ie native | chrome | etc. None is auto switch.
+            timeout (int): The timeout for switching contexts.
         """
-        self.get_page_source(safe=True, timeout=15)
-
-        orig_context = self.context
+        orig_context = self.context[:]
         self.logger.info('\n')
-        if not view:
-            self.logger.info(f'Switching from {orig_context} to {self.contexts[1]}.')
-            self.switch_to.context(self.contexts[1])
-        else:
-            self.logger.info(f'Switching from {orig_context} to {view}.')
-            next(self.switch_to.context(con) for con in self.contexts if view.lower() in con.lower())
+        timeout_ms = self.time.time() + timeout
+        while self.time.time() <= timeout_ms:
+            try:
+                if not view:
+                    desired_context = [c for c in self.contexts if c not in self.context] or [self.context]
+                    desired_context = desired_context[0]
+                    self.logger.info(f'Switching from {orig_context} to {desired_context}.')
+                    self.switch_to.context(desired_context)
+                else:
+                    self.logger.info(f'Switching from {orig_context} to {view}.')
+                    next(self.switch_to.context(con) for con in self.contexts if view.lower() in con.lower())
+
+                if orig_context != self.context:
+                    break
+            except:
+                self.time.sleep(.25)
+
         self.logger.info(f'Switched from {orig_context} to {view}.\n')
 
     def detect_language(self, text=None, limit=-1):
