@@ -26,12 +26,8 @@ class SeleniumAppiumShared(object):
         self.action_chains = ActionChains
         self.find_element_time = []
 
-        self.platform_name = self.capabilities.get('platformName')
-        if self.platform_name in ['android', 'ios']:
-            self.platform_name = self.platform_name.lower()
-        else:
-            self.platform_name = self.capabilities['browserName'].lower()
-
+        self.platform_name = self.capabilities.get('platformName') or self.capabilities.get('browserName')
+        self.platform_name = self.platform_name.lower()
         self._active_element = None
 
     def click_override(self, native=False):
