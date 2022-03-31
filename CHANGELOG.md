@@ -1,5 +1,15 @@
 ## CHANGELOG
 
+### [1.3.0 (2022-3-31)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.3.0)
+
+[Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.2.0...v1.3.0)
+
+- **build(core): updated changelog and version.
+- **fix(core): return current context.
+- **fix(core): remove copy.
+- **fix(core): switch context timout change and fix to auto toggle.
+- **fix(core): make platform name lower.
+---
 ### [1.2.0 (2021-12-10)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.2.0)
 
 [Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.1.1...v1.2.0)
