@@ -76,7 +76,7 @@ class AppiumShared(webdriver.Remote, SeleniumAppiumShared):
             view (None|str): The view you want ie native | chrome | etc. None is auto switch.
             timeout (int): The timeout for switching contexts.
         """
-        orig_context = self.context[:]
+        orig_context = self.context
         self.logger.info('\n')
         timeout_ms = self.time.time() + timeout
         while self.time.time() <= timeout_ms:
