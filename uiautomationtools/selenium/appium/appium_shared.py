@@ -76,26 +76,34 @@ class AppiumShared(webdriver.Remote, SeleniumAppiumShared):
             view (None|str): The view you want ie native | chrome | etc. None is auto switch.
             timeout (int): The timeout for switching contexts.
         """
-        orig_context = self.context
         self.logger.info('\n')
+        orig_context = self.context
         timeout_ms = self.time.time() + timeout
         while self.time.time() <= timeout_ms:
             try:
                 if not view:
-                    desired_context = [c for c in self.contexts if c not in self.context] or [self.context]
-                    desired_context = desired_context[0]
-                    self.logger.info(f'Switching from {orig_context} to {desired_context}.')
-                    self.switch_to.context(desired_context)
+                    desired_context = next((c for c in self.contexts if c not in self.context), self.context)
                 else:
-                    self.logger.info(f'Switching from {orig_context} to {view}.')
-                    next(self.switch_to.context(con) for con in self.contexts if view.lower() in con.lower())
+                    desired_context = next((c for c in self.contexts if view.lower() in c.lower()), view)
 
-                if orig_context != self.context:
-                    break
+                if desired_context == self.context:
+                    self.logger.info(f'Already in the context {self.context}.\n')
+                    return self.context
+
+                self.logger.info(f'Switching from {orig_context} to {desired_context}.')
+                self.switch_to.context(desired_context)
+
+                if desired_context == self.context:
+                    self.logger.info(f'Switched from {orig_context} to {self.context}.\n')
+                    return self.context
+
+                self.time.sleep(.25)
             except:
                 self.time.sleep(.25)
 
-        self.logger.info(f'Switched from {orig_context} to {view}.\n')
+            message = f"Unable to switch the context from {orig_context}.\n"
+            self.logger.error(message)
+            raise Exception(message)
 
     def detect_language(self, text=None, limit=-1):
         """
