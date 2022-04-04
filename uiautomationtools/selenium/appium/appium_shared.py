@@ -75,6 +75,9 @@ class AppiumShared(webdriver.Remote, SeleniumAppiumShared):
         Args:
             view (None|str): The view you want ie native | chrome | etc. None is auto switch.
             timeout (int): The timeout for switching contexts.
+
+        Returns:
+            context (str): The current context.
         """
         self.logger.info('\n')
         orig_context = self.context
@@ -101,9 +104,9 @@ class AppiumShared(webdriver.Remote, SeleniumAppiumShared):
             except:
                 self.time.sleep(.25)
 
-            message = f"Unable to switch the context from {orig_context}.\n"
-            self.logger.error(message)
-            raise Exception(message)
+        message = f"Unable to switch the context from {orig_context}.\n"
+        self.logger.error(message)
+        raise Exception(message)
 
     def detect_language(self, text=None, limit=-1):
         """
