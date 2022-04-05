@@ -26,7 +26,7 @@ requires = [
 
 setup(
     name="ui-automation-tools-mbt",
-    version="1.3.0",
+    version="1.3.1",
     author="Ashton Szabo",
     author_email="ashton.szabo@rakuten.com",
     description="Tools for UI automation using model based testing",

@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### [1.3.1 (2022-4-5)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.3.1)
+
+[Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.3.0...v1.3.1)
+
+- **build(core): update changelog and version for v1.3.1.
+- **fix(core): move raise out of while and add return to docstring
+---
 ### [1.3.0 (2022-3-31)](https://github.com/rakutentech/ui-automation-tools-mbt/tree/v1.3.0)
 
 [Full Changelog](https://github.com/rakutentech/ui-automation-tools-mbt/compare/v1.2.0...v1.3.0)
