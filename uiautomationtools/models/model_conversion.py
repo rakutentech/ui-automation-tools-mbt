@@ -59,7 +59,7 @@ def find_drawio_xml_nodes(model_name):
     return {n.attrs['id']: clean_values(n.attrs) for n in nodes}
 
 
-def generate_steps(model_name, new_steps, generator='random(edge_coverage(100))'):
+def generate_steps(model_name, new_steps, generator='random(edge_coverage(100))', app_dir=None):
     """
     This is the top level builder for making test steps.
 
@@ -67,13 +67,14 @@ def generate_steps(model_name, new_steps, generator='random(edge_coverage(100))'
         model_name (str): The name of the model file - no extension needed.
         new_steps (bool): Whether to recalculate the model steps.
         generator (str): The method used for building the steps.
+        app_dir (str): App under test folder's name.
 
     Returns:
         steps (list): The list of step objects.
     """
     model_name = model_name.split('.')[0]
     base_path = dh.get_root_dir()
-    app_dir = dh.get_src_app_dir()
+    app_dir = app_dir or dh.get_src_app_dir()
 
     models_dir = f'{base_path}/tests/{app_dir}/models'
     model_files = [model for model in iglob(f'{models_dir}//**', recursive=True) if '.drawio' in model]
@@ -156,12 +157,13 @@ def actions_to_dict(actions):
     return d
 
 
-def step_expander(steps):
+def step_expander(steps, app_dir=None):
     """
     This expands nested(imported) steps.
 
     Args:
         steps (dict): The condensed steps.
+        app_dir (str): App under test folder's name.
 
     Returns:
         steps (dict): The expanded (i - imports) steps.
@@ -185,7 +187,7 @@ def step_expander(steps):
             if i_steps:
                 i_steps = deepcopy(i_steps)
             else:
-                i_steps = generate_steps(f"test_{name[2:]}", True)
+                i_steps = generate_steps(f"test_{name[2:]}", True, app_dir=app_dir)
                 i_store[name] = i_steps
 
             for s in i_steps:
