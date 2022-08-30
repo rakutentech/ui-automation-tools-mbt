@@ -31,7 +31,7 @@ framework. The tests are documented as drawio flow diagrams of action and valida
 
 ## Usage
 ### Helpers
-```
+``` python
 import uiautomationtools.helpers.decorator_helpers as dh
 import uiautomationtools.helpers.dictionary_helpers as dh
 import uiautomationtools.helpers.directory_helpers as dh
@@ -44,7 +44,7 @@ This class contains all the model reading and execution functionality - a proper
 There are class properties that can be set from your SomeBasePytest class. You can also add your own test
 methods that will run before executing the test model steps. The **target** is either a browser or mobile
 device configurable through a pytest.ini. 
-```
+``` python
 import pytest
 from uiautomationtools.pytest import PytestHelper
 
@@ -65,7 +65,7 @@ create_empty_test_class_models()
 
 ### Selenium and Appium
 Custom selenium actions in addition to the standard methods and properties.
-```
+``` python
 from uiautomationtools.selenium import SeleniumExtended
 
 driver = SeleniumExtended(browser=browser)
@@ -73,7 +73,7 @@ element = driver.find_element_explicitly('button#buttonId', 'css selector')
 ```
 Custom appium actions in addition to the standard methods and properties. Depending on the 
 platform specified in the desired capabilities, an android or ios driver will be returned.
-```
+``` python
 from uiautomationtools.selenium import appium_factory
 
 driver = appium_factory('http://localhost:4723/wd/hub', desired_capabilities)
@@ -83,7 +83,7 @@ element = driver.find_element_explicitly(selector, 'xpath')
 
 ### Validations
 This class validates dom scrapes and computes a list of mismatch dictionaries.
-```
+``` python
 from uiautomationtools.validations import Validations
 
 validations = Validations(driver)
