@@ -55,6 +55,14 @@ class SomeBasePytest(PytestHelper):
         self.app = PytestHelper.app = App(...)
 ```
 
+#### Generated code
+When the test case has been created, a helper can be called to autogenerate the empty test classes associated.
+
+``` python
+from uiautomationtools.models.code_generator import create_empty_test_class_models
+create_empty_test_class_models()
+```
+
 ### Selenium and Appium
 Custom selenium actions in addition to the standard methods and properties.
 ```
