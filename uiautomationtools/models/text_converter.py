@@ -136,11 +136,12 @@ class TextConverter:
         if len(self.parsed_content) == 0:
             raise TextConverterException(f"Error parsing file: {self.path_file} | No methods found.")
 
-    def convert_to_JSON(self, path_to_file: str):
+    def convert_to_JSON(self, path_to_file: str, generator: str = "random(edge_coverage(100))"):
         """Converts the data to Json format and stores it in a file.
 
         Args:
             path_file: Path to the file.
+            generator: The mode the graphwalker will generate the steps.
         """
         vertex_defaults = {'properties': {
             'x': 0.0, 'y': 0.0, 'description': ''}}
@@ -150,7 +151,6 @@ class TextConverter:
         self.read_content(path_to_file)
         self.process_content()
         general_id = ''.join(random.choice(self.letters) for _ in range(20))
-        generator = "random(edge_coverage(100))"
         basename = os.path.splitext(os.path.basename(path_to_file))[0]
         id = ""
         vertices = []
