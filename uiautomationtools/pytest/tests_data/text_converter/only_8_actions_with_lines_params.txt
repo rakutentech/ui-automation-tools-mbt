@@ -1,0 +1,16 @@
+Start:
+e_action1 /
+param=1;
+v_action1
+i_action2 /
+param1=1;
+param2=2;
+iv_action2
+e_action3 / 
+param3="foo"; 
+param4="boo boo";
+v_action3 / 
+param3="foo";
+i_action4 / 
+param4="{'foo': 'boo'}";
+iv_action4
