@@ -13,6 +13,9 @@ class TextConverter:
     def __init__(self, debug: bool = False):
         """
         Init method
+        
+        Args:
+            debug: True to have always same ID patterns.
         """
         self.reset()
         self.letters = string.ascii_letters + string.digits
@@ -20,14 +23,16 @@ class TextConverter:
             self.letters = "A"
 
     def reset(self):
-        """Reset the properties values to default.
+        """
+        Reset the properties values to default.
         """
         self.content = []
         self.parsed_content = []
         self.path_file = ""
 
     def read_content(self, path_file: str):
-        """ Reads the selected file and stores the content for a posterior processing.
+        """
+        Reads the selected file and stores the content for a posterior processing.
 
         Args:
             path_file: Path to the file.
@@ -54,7 +59,8 @@ class TextConverter:
         self.content = [clean_line(x) for x in self.content]
 
     def process_content(self):
-        """Process the current content to make it json friendly.
+        """
+        Process the current content to make it json friendly.
         """
         def has_params(line_position: int) -> bool:
             return '/' in self.content[line_position]
@@ -137,7 +143,8 @@ class TextConverter:
             raise TextConverterException(f"Error parsing file: {self.path_file} | No methods found.")
 
     def convert_to_JSON(self, path_to_file: str, generator: str = "random(edge_coverage(100))"):
-        """Converts the data to Json format and stores it in a file.
+        """
+        Converts the data to Json format and stores it in a file.
 
         Args:
             path_file: Path to the file.
