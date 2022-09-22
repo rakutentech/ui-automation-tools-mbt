@@ -50,6 +50,7 @@ class SeleniumRemote(webdriver.Remote):
             dump_path = f'{self.logging.log_dir}/proxy/dumpfile'
             self.custom_proxy = Proxy(dump_path)
             self.custom_proxy.start_proxy_dump()
+        if proxy is True:
             proxy = "localhost:8080"
 
         browser_lower = browser.lower()
