@@ -1,7 +1,6 @@
 from typing import Dict, List
 import re
 import os
-import json
 import zlib
 import base64
 import numpy as np
@@ -12,11 +11,15 @@ from shutil import copyfile
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 import xml.etree.ElementTree as ET
+from text_converter import TextConverter
 
 import uiautomationtools.helpers.directory_helpers as dh
 from uiautomationtools.helpers.dictionary_helpers import flatten
 from uiautomationtools.helpers.json_helpers import deserialize
 
+
+class ModelConversionException(Exception):
+    """Exception when error occurs while generating the steps."""
 
 def find_drawio_xml_nodes(model_name):
     """
@@ -73,67 +76,78 @@ def generate_steps(model_name: str, new_steps: str, generator: str = 'random(edg
     Returns:
         steps: The list of step objects.
     """
-    model_name = model_name.split('.')[0]
+    model_name = os.path.basename(model_name).split('.')[0]
     base_path = dh.get_root_dir()
     app_dir = app_dir or dh.get_src_app_dir()
 
     models_dir = f'{base_path}/tests/{app_dir}/models'
-    model_files = [model for model in iglob(f'{models_dir}//**', recursive=True) if '.drawio' in model]
-    model_file = dh.find_reference_in_list(f'{model_name}.drawio', model_files)
-
+    model_files = [model for model in iglob(f'{models_dir}//**', recursive=True) if model.endswith('.drawio') or model.endswith('.txt') ]
+    model_file = dh.find_reference_in_list(f'{model_name}.drawio', model_files) or dh.find_reference_in_list(f'{model_name}.txt', model_files)
+    
+    if model_file == 0:
+        raise ModelConversionException(f"The file with the model_name: {model_name} is not found on the dir: {models_dir}")
+    
+    json_model_file = model_file.replace('.txt', '.json').replace('.drawio', '.json')
+    
     steps_dir = f'{base_path}/tests/{app_dir}/steps'
     steps_files = list(iglob(f'{steps_dir}//**', recursive=True))
     steps_file = dh.find_reference_in_list(f'{model_name}.json', steps_files)
+    dh.safe_mkdirs(steps_dir)
+    steps_file = steps_file or f'{steps_dir}/{model_name}.json'
 
     if new_steps:
-        attrs = find_drawio_xml_nodes(model_file)
+        if model_file.endswith('.drawio'):
+            attrs = find_drawio_xml_nodes(model_file)
 
-        vertex_defaults = {'properties': {'x': 0.0, 'y': 0.0, 'description': ''}}
-        edge_defaults = {'properties': {'description': ''}, 'weight': 0.0, 'dependency': 0}
+            vertex_defaults = {'properties': {'x': 0.0, 'y': 0.0, 'description': ''}}
+            edge_defaults = {'properties': {'description': ''}, 'weight': 0.0, 'dependency': 0}
 
-        start = None
-        vertices = []
-        edges = []
-        for a in attrs.values():
-            actions = None
-            value = a.get('value')
-            if value:
-                value_actions = value.split('|')
-                value = value_actions[0]
-                if value_actions[0] != value_actions[-1]:
-                    actions = f'\n{value_actions[-1]}'
+            start = None
+            vertices = []
+            edges = []
+            for a in attrs.values():
+                actions = None
+                value = a.get('value')
+                if value:
+                    value_actions = value.split('|')
+                    value = value_actions[0]
+                    if value_actions[0] != value_actions[-1]:
+                        actions = f'\n{value_actions[-1]}'
 
-            if value == 'Start':
-                start = a
-            elif a.get('parent') == a.get('vertex') and value and value != 'Start':
-                vertex = {'id': f'n/{a["id"]}', 'name': value}
-                vertices.append({**vertex, **vertex_defaults})
-            elif a.get('parent') != a.get('vertex') and value:
-                parent = attrs[a['parent']]
-                source = parent.get('source')
-                target = parent.get('target')
-                if not target:
-                    continue
-                edge = {'id': f'e/{a["id"]}', 'name': value,
-                        'sourceVertexId': f"n/{source}", 'targetVertexId': f"n/{target}"}
-                if actions:
-                    edge['actions'] = [actions]
-                edges.append({**edge, **edge_defaults})
+                if value == 'Start':
+                    start = a
+                elif a.get('parent') == a.get('vertex') and value and value != 'Start':
+                    vertex = {'id': f'n/{a["id"]}', 'name': value}
+                    vertices.append({**vertex, **vertex_defaults})
+                elif a.get('parent') != a.get('vertex') and value:
+                    parent = attrs[a['parent']]
+                    source = parent.get('source')
+                    target = parent.get('target')
+                    if not target:
+                        continue
+                    edge = {'id': f'e/{a["id"]}', 'name': value,
+                            'sourceVertexId': f"n/{source}", 'targetVertexId': f"n/{target}"}
+                    if actions:
+                        edge['actions'] = [actions]
+                    edges.append({**edge, **edge_defaults})
 
-        for e in edges:
-            if start['id'] in e['sourceVertexId']:
-                e['id'] = f'e/{start["id"]}'
-                e.pop('sourceVertexId')
+            for e in edges:
+                if start['id'] in e['sourceVertexId']:
+                    e['id'] = f'e/{start["id"]}'
+                    e.pop('sourceVertexId')
 
-        models = [{'name': model_name, 'id': '',
-                   'startElementId': f'e/{start["id"]}', 'generator': generator,
-                   'vertices': vertices, 'edges': edges}]
+            models = [{'name': model_name, 'id': '',
+                    'startElementId': f'e/{start["id"]}', 'generator': generator,
+                    'vertices': vertices, 'edges': edges}]
 
-        json_model_file = model_file.replace('.drawio', '.json')
-        dh.make_json({'models': models}, json_model_file)
+            
+            dh.make_json({'models': models}, json_model_file)
 
-        dh.safe_mkdirs(steps_dir)
-        steps_file = steps_file or f'{steps_dir}/{model_name}.json'
+            
+        else:
+            text_model = TextConverter()
+            text_model.convert_to_JSON(model_file)
+            
         run(f'altwalker offline -m {json_model_file} "{generator}" -f {steps_file}', shell=True)
 
     return dh.load_json(steps_file)

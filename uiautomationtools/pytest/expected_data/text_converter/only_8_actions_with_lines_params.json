@@ -1,0 +1,107 @@
+{
+    "models": [
+        {
+            "name": "only_8_actions_with_lines_params",
+            "id": "",
+            "startElementId": "e/AAAAAAAAAAAAAAAAAAAA-1",
+            "generator": "random(edge_coverage(100))",
+            "vertices": [
+                {
+                    "name": "v_action1",
+                    "id": "n/AAAAAAAAAAAAAAAAAAAA-2",
+                    "properties": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "iv_action2",
+                    "id": "n/AAAAAAAAAAAAAAAAAAAA-4",
+                    "properties": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "v_action3",
+                    "id": "n/AAAAAAAAAAAAAAAAAAAA-6",
+                    "properties": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "description": ""
+                    }
+                },
+                {
+                    "name": "iv_action4",
+                    "id": "n/AAAAAAAAAAAAAAAAAAAA-8",
+                    "properties": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "description": ""
+                    }
+                }
+            ],
+            "edges": [
+                {
+                    "name": "e_action1",
+                    "id": "e/AAAAAAAAAAAAAAAAAAAA-1",
+                    "targetVertexId": "n/AAAAAAAAAAAAAAAAAAAA-2",
+                    "actions": [
+                        "param=1;"
+                    ],
+                    "properties": {
+                        "description": ""
+                    },
+                    "weight": 0.0,
+                    "dependency": 0
+                },
+                {
+                    "sourceVertexId": "n/AAAAAAAAAAAAAAAAAAAA-2",
+                    "name": "i_action2",
+                    "id": "e/AAAAAAAAAAAAAAAAAAAA-3",
+                    "targetVertexId": "n/AAAAAAAAAAAAAAAAAAAA-4",
+                    "actions": [
+                        "param1=1;",
+                        "param2=2;"
+                    ],
+                    "properties": {
+                        "description": ""
+                    },
+                    "weight": 0.0,
+                    "dependency": 0
+                },
+                {
+                    "sourceVertexId": "n/AAAAAAAAAAAAAAAAAAAA-4",
+                    "name": "e_action3",
+                    "id": "e/AAAAAAAAAAAAAAAAAAAA-5",
+                    "targetVertexId": "n/AAAAAAAAAAAAAAAAAAAA-6",
+                    "actions": [
+                        "param3=\"foo\"; ",
+                        "param4=\"boo boo\";"
+                    ],
+                    "properties": {
+                        "description": ""
+                    },
+                    "weight": 0.0,
+                    "dependency": 0
+                },
+                {
+                    "sourceVertexId": "n/AAAAAAAAAAAAAAAAAAAA-6",
+                    "name": "i_action4",
+                    "id": "e/AAAAAAAAAAAAAAAAAAAA-7",
+                    "targetVertexId": "n/AAAAAAAAAAAAAAAAAAAA-8",
+                    "actions": [
+                        "param4=\"{'foo': 'boo'}\";"
+                    ],
+                    "properties": {
+                        "description": ""
+                    },
+                    "weight": 0.0,
+                    "dependency": 0
+                }
+            ]
+        }
+    ]
+}
