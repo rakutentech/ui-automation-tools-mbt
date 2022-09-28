@@ -20,7 +20,8 @@ requires = [
     'pyautogui',
     'pyperclip',
     'pypeln',
-    'mitmproxy'
+    'mitmproxy',
+    'webdriver-manager'
 ]
 
 

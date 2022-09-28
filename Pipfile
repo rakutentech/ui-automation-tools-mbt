@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ui-automation-tools-mbt = {editable = true, path = "."}
+
+[dev-packages]
+autoflake = "*"
+black = "*"
+isort = "*"
+pytest-cov = "*"
+
+[requires]
+python_version = ">=3.8"
