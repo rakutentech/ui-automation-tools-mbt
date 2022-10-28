@@ -1,8 +1,6 @@
 import re
 import os
 import sys
-from typing import Dict
-from typing import Union
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -20,9 +18,9 @@ class SeleniumRemote(webdriver.Remote):
     This is an extension of the webdriver.Remote class.
     """
 
-    def __init__(self, command_executor: str = None, browser: str = 'chrome', desired_capabilities: Dict[str] = None,
-                 proxy: Union[bool, str] = False, keep_alive: bool = False, file_detector=None,
-                 options=None, headless: bool = False):
+    def __init__(self, command_executor=None, browser='chrome', desired_capabilities=None,
+                 proxy=False, keep_alive=False, file_detector=None,
+                 options=None, headless=False):
         """
         This constructor for SeleniumRemote. If no executor is provided the webdriver will open locally.
 
