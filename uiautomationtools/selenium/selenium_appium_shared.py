@@ -81,10 +81,10 @@ class SeleniumAppiumShared(object):
                     if value != 'body':
                         if 'native' not in self.context.lower():
                             element = self.execute_script(
-                                "return arguments[0].filter(e => e.getAttribute('attribute'));", element)
+                                f"return arguments[0].filter(e => e.getAttribute('{attribute}'));", element)
                         else:
                             # TODO - make async
-                            element = [ele for ele in element if ele.get_attribute('attribute')]
+                            element = [ele for ele in element if ele.get_attribute(attribute)]
 
                 self.find_element_time.append([value, timeout - (timeout_ms - self.time.time())])
                 return element
