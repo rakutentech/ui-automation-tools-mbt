@@ -12,7 +12,7 @@ requires = [
     'pytest-parallel',
     'altwalker',
     'selenium<4.0.0',
-    'Appium-Python-Client',
+    'Appium-Python-Client<=2.0.0',
     'numpy',
     'langdetect',
     'lxml',

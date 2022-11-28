@@ -58,9 +58,9 @@ class SeleniumAppiumShared(object):
         Returns:
             element (WebElement): The found element.
         """
-        if self.platform_name == 'ios' and by == 'xpath':
-            value = value.split('=')[-1][1:-2]
-            by = 'id'
+        attribute = 'class'
+        if self.platform_name == 'ios':
+            attribute = 'accessible'
 
         error = None
         timeout_ms = self.time.time() + timeout
@@ -68,9 +68,7 @@ class SeleniumAppiumShared(object):
             try:
                 if not many:
                     element = self.find_element(by, value)
-                    element.get_attribute('class')
-                    if not element.is_displayed() or not element.is_enabled():
-                        raise self.driver_exceptions.NoSuchElementException()
+                    element.get_attribute(attribute)
 
                     # WORKAROUND - overriding .click
                     self._active_element = element
@@ -83,10 +81,10 @@ class SeleniumAppiumShared(object):
                     if value != 'body':
                         if 'native' not in self.context.lower():
                             element = self.execute_script(
-                                "return arguments[0].filter(e => e.getAttribute('class'));", element)
+                                f"return arguments[0].filter(e => e.getAttribute('{attribute}'));", element)
                         else:
                             # TODO - make async
-                            element = [ele for ele in element if ele.get_attribute('class')]
+                            element = [ele for ele in element if ele.get_attribute(attribute)]
 
                 self.find_element_time.append([value, timeout - (timeout_ms - self.time.time())])
                 return element

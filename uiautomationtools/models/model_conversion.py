@@ -11,7 +11,7 @@ from shutil import copyfile
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 import xml.etree.ElementTree as ET
-from text_converter import TextConverter
+from uiautomationtools.models.text_converter import TextConverter
 
 import uiautomationtools.helpers.directory_helpers as dh
 from uiautomationtools.helpers.dictionary_helpers import flatten
@@ -20,6 +20,7 @@ from uiautomationtools.helpers.json_helpers import deserialize
 
 class ModelConversionException(Exception):
     """Exception when error occurs while generating the steps."""
+
 
 def find_drawio_xml_nodes(model_name):
     """
@@ -31,6 +32,7 @@ def find_drawio_xml_nodes(model_name):
     Returns:
         nodes (list<dict>): The node-attributes of the xml file
     """
+
     def clean_values(n):
         value = n.get('value')
         if not value:
@@ -63,7 +65,8 @@ def find_drawio_xml_nodes(model_name):
     return {n.attrs['id']: clean_values(n.attrs) for n in nodes}
 
 
-def generate_steps(model_name: str, new_steps: str, generator: str = 'random(edge_coverage(100))', app_dir: str = None) -> List[Dict]:
+def generate_steps(model_name: str, new_steps: str, generator: str = 'random(edge_coverage(100))',
+                   app_dir: str = None) -> List[Dict]:
     """
     This is the top level builder for making test steps.
 
@@ -81,14 +84,17 @@ def generate_steps(model_name: str, new_steps: str, generator: str = 'random(edg
     app_dir = app_dir or dh.get_src_app_dir()
 
     models_dir = f'{base_path}/tests/{app_dir}/models'
-    model_files = [model for model in iglob(f'{models_dir}//**', recursive=True) if model.endswith('.drawio') or model.endswith('.txt') ]
-    model_file = dh.find_reference_in_list(f'{model_name}.drawio', model_files) or dh.find_reference_in_list(f'{model_name}.txt', model_files)
-    
+    model_files = [model for model in iglob(f'{models_dir}//**', recursive=True) if
+                   model.endswith('.drawio') or model.endswith('.txt')]
+    model_file = dh.find_reference_in_list(f'{model_name}.drawio', model_files) or dh.find_reference_in_list(
+        f'{model_name}.txt', model_files)
+
     if model_file == 0:
-        raise ModelConversionException(f"The file with the model_name: {model_name} is not found on the dir: {models_dir}")
-    
+        raise ModelConversionException(
+            f"The file with the model_name: {model_name} is not found on the dir: {models_dir}")
+
     json_model_file = model_file.replace('.txt', '.json').replace('.drawio', '.json')
-    
+
     steps_dir = f'{base_path}/tests/{app_dir}/steps'
     steps_files = list(iglob(f'{steps_dir}//**', recursive=True))
     steps_file = dh.find_reference_in_list(f'{model_name}.json', steps_files)
@@ -137,17 +143,16 @@ def generate_steps(model_name: str, new_steps: str, generator: str = 'random(edg
                     e.pop('sourceVertexId')
 
             models = [{'name': model_name, 'id': '',
-                    'startElementId': f'e/{start["id"]}', 'generator': generator,
-                    'vertices': vertices, 'edges': edges}]
+                       'startElementId': f'e/{start["id"]}', 'generator': generator,
+                       'vertices': vertices, 'edges': edges}]
 
-            
             dh.make_json({'models': models}, json_model_file)
 
-            
+
         else:
             text_model = TextConverter()
             text_model.convert_to_JSON(model_file)
-            
+
         run(f'altwalker offline -m {json_model_file} "{generator}" -f {steps_file}', shell=True)
 
     return dh.load_json(steps_file)
@@ -172,7 +177,7 @@ def actions_to_dict(actions):
     return d
 
 
-def step_expander(steps: Dict, app_dir:str = None) -> Dict:
+def step_expander(steps: Dict, app_dir: str = None) -> Dict:
     """
     This expands nested(imported) steps.
 

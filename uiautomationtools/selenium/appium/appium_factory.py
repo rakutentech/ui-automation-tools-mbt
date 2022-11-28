@@ -23,7 +23,7 @@ def appium_factory(command_executor='http://127.0.0.1:4723/wd/hub', desired_capa
         appium_object: The platform specific custom appium object.
     """
     platform = desired_capabilities['platformName']
-    if 'ios' in platform:
+    if 'ios' in platform.lower():
         return AppiumIos(command_executor, desired_capabilities, proxy, keep_alive,
                          direct_connection, session_id, language)
     else:
