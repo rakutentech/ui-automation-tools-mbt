@@ -12,8 +12,9 @@ class Validations(object):
     """
     This class holds all the ways we gather and use information for validations.
     """
+    default_threshold = 90
 
-    def __init__(self, driver, debug=False):
+    def __init__(self, driver, debug=False, validation_threshold=default_threshold):
         """
         The constructor for Validations.
 
@@ -25,6 +26,8 @@ class Validations(object):
         self.debug = debug
         self.logger = self.driver.logger
         self.dict_helpers = dict_helpers
+        self.validation_threshold = validation_threshold or self.default_threshold
+        self.validation_threshold = int(self.validation_threshold)
 
         self.references_directory = None
         self.references_file_paths = None
@@ -163,11 +166,12 @@ class Validations(object):
         return references
 
     def validate_references(self, reference_name=None, stored_references=None, safe=False, skipped_keys=None,
-                            skipped_tags=None, normalize=False, html=None, **kwargs):
+                            skipped_tags=None, normalize=False, html=None, threshold=None, **kwargs):
         """
         This compares stored references of the same name with current ones.
 
         Args:
+            threshold(None|int): To mark test as fail if the validation percentage goes under the threshold.
             reference_name (None|str): The name of the screen.
             stored_references (None|dict): Passed values to compare against
             safe (bool): Whether to raise errors on elements not found.
@@ -175,6 +179,7 @@ class Validations(object):
             skipped_tags (None|list): The element tags to skip.
             normalize (bool): Whether to convert each of the comparable values in the same casing.
             html (None|str): The html to build. If None then it builds from the page.
+
             kwargs:
                 iframe (bool): Whether the references being build live in an iframe.
                 body (bool): Whether the references being built live in the body.
@@ -182,6 +187,9 @@ class Validations(object):
         Returns:
             mismatches (dict): A record of any mismatching keys and or values.
         """
+        current_threshold = self.validation_threshold
+        if threshold:
+            current_threshold = int(threshold)
         self.logger.info(f'\n')
         self.logger.info(f'Validating references for {reference_name}.')
         skipped_keys = skipped_keys or []
@@ -197,14 +205,43 @@ class Validations(object):
             current_references = self.build_references_appium(skipped_tags=skipped_tags)
         else:
             current_references = self.build_references_selenium(skipped_tags=skipped_tags, html=html, **kwargs)
-
         mismatches = self.dict_helpers.async_compare_dictionaries(stored_references, current_references,
                                                                   skipped_keys, normalize)
-        if (mismatches.get('keys') or mismatches.get('values')) and not safe:
-            error_message = f'Validated references with mismatches {mismatches}.'
+
+        weight = {
+            'accessible': 20,
+            'enabled': 20,
+            'label': 50,
+            'text': 50
+        }
+
+        stored_references_elements = 0
+        for key in stored_references.keys():
+            if type(stored_references[key]) == str:
+                continue
+            for i in range(len(stored_references[key])):
+                stored_references_elements += len(stored_references[key][i].keys())
+
+        mismatches_elements = 100 * len(mismatches.get('keys', []))
+        for i in mismatches.get('values', []):
+            key = i['key'].split(".")[-1]
+            if key in weight.keys():
+                mismatches_elements += weight[key]
+            else:
+                mismatches_elements += 1
+
+        accuracy_rate = 100 - ((100 * mismatches_elements) / stored_references_elements)
+        if accuracy_rate == 100:
+            self.logger.info(f'Validated references for {reference_name}.\n')
+
+        elif accuracy_rate >= current_threshold:
+            warning_message = f'Validated references with some mismatches {mismatches} -- WARNING.'
+            self.logger.warning(warning_message)
+
+        else:
+            error_message = f'Validated references with mismatches {mismatches} -- FAIL.'
             self.fail(error_message)
 
-        self.logger.info(f'Validated references for {reference_name}.\n')
         return mismatches
 
     def fail(self, error_message, exception=Exception):
